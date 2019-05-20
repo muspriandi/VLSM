@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Array;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button tampil   = (Button) findViewById(R.id.buttonTampil);
-
         tampil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 Integer jumlahNetwork = Integer.parseInt(jumlah.getText().toString());
                                 LinearLayout layout = (LinearLayout) findViewById(R.id.loopLayout);
-                                final ArrayList<EditText> network = new ArrayList<>();
+                                final ArrayList<EditText> network = new ArrayList<EditText>();
 
                                 layout.removeAllViews();
                                 int i = 1;
@@ -139,32 +139,94 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             if(k != 1) {
-                                Integer max = 0;
                                 EditText x;
+
                                 for(i = 0; i < network.size(); i++) {
-                                    for(j = network.size(); j < network.size()-i; j++) {
-                                        if(Integer.parseInt(network.get(i).getText().toString()) > Integer.parseInt(network.get(i+1).getText().toString())) {
-                                            x   = network.get(i);
-                                            network.set(i, network.get(i+1));
-                                            network.set(i+1, x);
+                                    for(j = 0; j < network.size()-i-1; j++) {
+                                        if(Integer.parseInt(network.get(j).getText().toString()) < Integer.parseInt(network.get(j+1).getText().toString())) {
+                                            x = (EditText) network.get(j);
+                                            network.set(j, network.get(j+1));
+                                            network.set(j+1, x);
                                         }
                                     }
                                 }
 
-                                for(i = 0 ; i < network.size(); i++) {
-                                    Toast.makeText(MainActivity.this, ""+network.get(i).getText().toString(), Toast.LENGTH_SHORT).show();
+                                ArrayList<Integer> biner1 = new ArrayList<Integer>();
+                                ArrayList<Integer> biner2 = new ArrayList<Integer>();
+                                ArrayList<Integer> biner3 = new ArrayList<Integer>();
+                                ArrayList<Integer> biner4 = new ArrayList<Integer>();
+
+                                Integer m = 128;
+                                Integer n = Integer.parseInt(oktetSatu.getText().toString());
+                                for (i = 1; i <= 8; i++) {
+                                    if (n >= m) {
+                                        biner1.add(1);
+
+                                        n = n - m;
+                                    }
+                                    else {
+                                        biner1.add(0);
+                                    }
+                                    m = m/2;
+                                }
+                                m = 128;
+                                n = Integer.parseInt(oktetDua.getText().toString());
+                                for (i = 1; i <= 8; i++) {
+                                    if (n >= m) {
+                                        biner2.add(1);
+
+                                        n = n - m;
+                                    }
+                                    else {
+                                        biner2.add(0);
+                                    }
+                                    m = m/2;
+                                }
+                                m = 128;
+                                n = Integer.parseInt(oktetTiga.getText().toString());
+                                for (i = 1; i <= 8; i++) {
+                                    if (n >= m) {
+                                        biner3.add(1);
+
+                                        n = n - m;
+                                    }
+                                    else {
+                                        biner3.add(0);
+                                    }
+                                    m = m/2;
+                                }
+                                m = 128;
+                                n = Integer.parseInt(oktetEmpat.getText().toString());
+                                for (i = 1; i <= 8; i++) {
+                                    if (n >= m) {
+                                        biner4.add(1);
+
+                                        n = n - m;
+                                    }
+                                    else {
+                                        biner4.add(0);
+                                    }
+                                    m = m/2;
                                 }
 
+                                StringBuilder builder = new StringBuilder();
+                                StringBuilder builder2 = new StringBuilder();
+                                StringBuilder builder3 = new StringBuilder();
+                                StringBuilder builder4 = new StringBuilder();
+                                for(i = 0; i < biner1.size(); i++) {
+                                    builder.append(biner1.get(i));
+                                }
+                                for(i = 0; i < biner2.size(); i++) {
+                                    builder2.append(biner2.get(i));
+                                }
+                                for(i = 0; i < biner3.size(); i++) {
+                                    builder3.append(biner3.get(i));
+                                }
+                                for(i = 0; i < biner4.size(); i++) {
+                                    builder4.append(biner4.get(i));
+                                }
 
-//                                if(Integer.parseInt(network.get(i).getText().toString()) > max) {
-//                                    max = Integer.parseInt(network.get(i).getText().toString());
-//                                }
-
-//                                Integer oktet1 = Integer.parseInt(oktetSatu.getText().toString());
-//                                Integer oktet2 = Integer.parseInt(oktetDua.getText().toString());
-//                                Integer oktet3 = Integer.parseInt(oktetTiga.getText().toString());
-//                                Integer oktet4 = Integer.parseInt(oktetEmpat.getText().toString());
-//                                Integer prefix = Integer.parseInt(prefixLength.getText().toString());
+                                Toast.makeText(MainActivity.this, "Biner IPv4 :"+builder+"."+builder2+"."+builder3+"."+builder4, Toast.LENGTH_LONG).show();
                             }
                         }
                     }
