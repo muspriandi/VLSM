@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="10dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Alamat network IPv4" />
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal">
+
+       <EditText
+           android:id="@+id/oktetSatu"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:width="45dp"
+           android:maxLength="3"
+           android:inputType="number" />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="." />
+
+       <EditText
+           android:id="@+id/oktetDua"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:width="45dp"
+           android:maxLength="3"
+           android:inputType="number" />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="." />
+
+       <EditText
+           android:id="@+id/oktetTiga"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:width="45dp"
+           android:maxLength="3"
+           android:inputType="number" />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="." />
+
+       <EditText
+           android:id="@+id/oktetEmpat"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:width="45dp"
+           android:maxLength="3"
+           android:inputType="number" />
+
+       <TextView
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="/" />
+
+       <EditText
+           android:id="@+id/prefixLength"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:width="45dp"
+           android:maxLength="2"
+           android:inputType="number" />
+
+   </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Network" />
+
+    <EditText
+        android:id="@+id/jumlahNetwork"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Masukkan jumlah network"
+        android:maxLength="3"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/buttonTampil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tampilkan"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/loopLayout"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
