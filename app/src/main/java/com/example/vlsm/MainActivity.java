@@ -139,21 +139,8 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                             if(k != 1) {
-                                EditText x;
-
-                                for(i = 0; i < network.size(); i++) {
-                                    for(j = 0; j < network.size()-i-1; j++) {
-                                        if(Integer.parseInt(network.get(j).getText().toString()) < Integer.parseInt(network.get(j+1).getText().toString())) {
-                                            x = (EditText) network.get(j);
-                                            network.set(j, network.get(j+1));
-                                            network.set(j+1, x);
-                                        }
-                                    }
-                                }
-
-
-                                Integer m;
-                                Integer n;
+                                int m;
+                                int n;
                                 ArrayList<Integer> biner1 = new ArrayList<Integer>();
 
                                 for(i = 0; i < 4 ; i++) {
@@ -191,17 +178,41 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 StringBuilder builder = new StringBuilder();
-
                                 for(i = 0; i < biner1.size(); i++) {
                                     builder.append(biner1.get(i));
                                 }
-
                                 Toast.makeText(MainActivity.this, "Biner IPv4 :"+builder, Toast.LENGTH_LONG).show();
+
+                                int max = max(network);
+
+                                Toast.makeText(MainActivity.this, "Network Terbesar :"+max, Toast.LENGTH_LONG).show();
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    public int max(ArrayList<EditText> network) {
+        int i;
+        int max = Integer.parseInt(network.get(0).getText().toString());
+        for(i = 1; i < network.size(); i++) {
+            if(Integer.parseInt(network.get(i).getText().toString()) > max) {
+                max = Integer.parseInt(network.get(i).getText().toString());
+            }
+        }
+
+        return max;
+//          EditText x;
+//          for(i = 0; i < network.size(); i++) {
+//              for(j = 0; j < network.size()-i-1; j++) {
+//                  if(Integer.parseInt(network.get(j).getText().toString()) < Integer.parseInt(network.get(j+1).getText().toString())) {
+//                      x = (EditText) network.get(j);
+//                      network.set(j, network.get(j+1));
+//                      network.set(j+1, x);
+//                  }
+//              }
+//          }
     }
 }
