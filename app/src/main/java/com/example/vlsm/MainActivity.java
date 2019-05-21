@@ -151,82 +151,52 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
 
+
+                                Integer m;
+                                Integer n;
                                 ArrayList<Integer> biner1 = new ArrayList<Integer>();
-                                ArrayList<Integer> biner2 = new ArrayList<Integer>();
-                                ArrayList<Integer> biner3 = new ArrayList<Integer>();
-                                ArrayList<Integer> biner4 = new ArrayList<Integer>();
 
-                                Integer m = 128;
-                                Integer n = Integer.parseInt(oktetSatu.getText().toString());
-                                for (i = 1; i <= 8; i++) {
-                                    if (n >= m) {
-                                        biner1.add(1);
-
-                                        n = n - m;
+                                for(i = 0; i < 4 ; i++) {
+                                    if(i==0) {
+                                        m = 128;
+                                        n = Integer.parseInt(oktetSatu.getText().toString());
                                     }
                                     else {
-                                        biner1.add(0);
+                                        if(i==1) {
+                                            m = 128;
+                                            n = Integer.parseInt(oktetDua.getText().toString());
+                                        }
+                                        else {
+                                            if(i==2) {
+                                                m = 128;
+                                                n = Integer.parseInt(oktetTiga.getText().toString());
+                                            }
+                                            else {
+                                                m = 128;
+                                                n = Integer.parseInt(oktetEmpat.getText().toString());
+                                            }
+                                        }
                                     }
-                                    m = m/2;
-                                }
-                                m = 128;
-                                n = Integer.parseInt(oktetDua.getText().toString());
-                                for (i = 1; i <= 8; i++) {
-                                    if (n >= m) {
-                                        biner2.add(1);
 
-                                        n = n - m;
-                                    }
-                                    else {
-                                        biner2.add(0);
-                                    }
-                                    m = m/2;
-                                }
-                                m = 128;
-                                n = Integer.parseInt(oktetTiga.getText().toString());
-                                for (i = 1; i <= 8; i++) {
-                                    if (n >= m) {
-                                        biner3.add(1);
+                                    for (j = 0; j < 8; j++) {
+                                        if (n >= m) {
+                                            biner1.add(1);
 
-                                        n = n - m;
+                                            n = n - m;
+                                        } else {
+                                            biner1.add(0);
+                                        }
+                                        m = m / 2;
                                     }
-                                    else {
-                                        biner3.add(0);
-                                    }
-                                    m = m/2;
-                                }
-                                m = 128;
-                                n = Integer.parseInt(oktetEmpat.getText().toString());
-                                for (i = 1; i <= 8; i++) {
-                                    if (n >= m) {
-                                        biner4.add(1);
-
-                                        n = n - m;
-                                    }
-                                    else {
-                                        biner4.add(0);
-                                    }
-                                    m = m/2;
                                 }
 
                                 StringBuilder builder = new StringBuilder();
-                                StringBuilder builder2 = new StringBuilder();
-                                StringBuilder builder3 = new StringBuilder();
-                                StringBuilder builder4 = new StringBuilder();
+
                                 for(i = 0; i < biner1.size(); i++) {
                                     builder.append(biner1.get(i));
                                 }
-                                for(i = 0; i < biner2.size(); i++) {
-                                    builder2.append(biner2.get(i));
-                                }
-                                for(i = 0; i < biner3.size(); i++) {
-                                    builder3.append(biner3.get(i));
-                                }
-                                for(i = 0; i < biner4.size(); i++) {
-                                    builder4.append(biner4.get(i));
-                                }
 
-                                Toast.makeText(MainActivity.this, "Biner IPv4 :"+builder+"."+builder2+"."+builder3+"."+builder4, Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "Biner IPv4 :"+builder, Toast.LENGTH_LONG).show();
                             }
                         }
                     }
