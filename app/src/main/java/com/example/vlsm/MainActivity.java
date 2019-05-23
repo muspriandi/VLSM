@@ -14,6 +14,8 @@ import android.widget.Toast;
 import java.sql.Array;
 import java.util.ArrayList;
 
+import static java.lang.Boolean.TRUE;
+
 public class MainActivity extends AppCompatActivity {
     TextView textView;
     EditText editText;
@@ -141,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                             if(k != 1) {
                                 int m;
                                 int n;
-                                ArrayList<Integer> biner1 = new ArrayList<Integer>();
+                                ArrayList<Integer> biner = new ArrayList<Integer>();
 
                                 for(i = 0; i < 4 ; i++) {
                                     if(i==0) {
@@ -164,28 +166,60 @@ public class MainActivity extends AppCompatActivity {
                                             }
                                         }
                                     }
-
                                     for (j = 0; j < 8; j++) {
                                         if (n >= m) {
-                                            biner1.add(1);
+                                            biner.add(1);
 
                                             n = n - m;
                                         } else {
-                                            biner1.add(0);
+                                            biner.add(0);
                                         }
                                         m = m / 2;
                                     }
                                 }
 
-                                StringBuilder builder = new StringBuilder();
-                                for(i = 0; i < biner1.size(); i++) {
-                                    builder.append(biner1.get(i));
+                                int prefix  = Integer.parseInt(prefixLength.getText().toString());
+                                ArrayList<Integer> binerNetwork = new ArrayList<Integer>(biner);
+                                ArrayList<ArrayList<Integer>> hasilNetwork = new ArrayList<ArrayList<Integer>>();
+
+                                while(network.isEmpty() != TRUE) {
+                                    int max   = max(network);
+                                    for(i=0; i < network.size(); i++) {
+                                        if(Integer.parseInt(network.get(i).getText().toString()) == max) {
+                                            network.remove(i);
+                                        }
+                                    }
+
+                                    int x=0;
+                                    int slash       = slash(network);
+                                    int pangkat     = slash-prefix;
+                                    double kombinasi   = Math.pow(2, pangkat);
+
+                                    while(prefix != slash) {
+                                        prefix      = prefix+prefix;
+                                        kombinasi   = kombinasi/2;
+
+                                        for(j=0; j < kombinasi; j++) {
+                                            binerNetwork.set(prefix, x);
+
+                                            hasilNetwork.add(j, binerNetwork);
+
+                                            if(j >= (kombinasi/2)) {
+                                                x   = 1;
+                                            }
+                                            else {
+                                                x   = 0;
+                                            }
+                                        }
+                                    }
                                 }
-                                Toast.makeText(MainActivity.this, "Biner IPv4 :"+builder, Toast.LENGTH_LONG).show();
 
-                                int max = max(network);
 
-                                Toast.makeText(MainActivity.this, "Network Terbesar :"+max, Toast.LENGTH_LONG).show();
+//                                StringBuilder builder = new StringBuilder();
+//                                for(i = 0; i < network.size(); i++) {
+//                                    builder.append(network.get(i).getText().toString());
+//                                }
+//                                Toast.makeText(MainActivity.this, " "+builder+" ", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
@@ -196,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
 
     public int max(ArrayList<EditText> network) {
         int i;
+
         int max = Integer.parseInt(network.get(0).getText().toString());
         for(i = 1; i < network.size(); i++) {
             if(Integer.parseInt(network.get(i).getText().toString()) > max) {
@@ -204,6 +239,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return max;
+    }
+
+    public int slash(ArrayList<EditText> network) {
+        int i;
+        int slash = 31;
+        int max = max(network);
+
+        for(i = 1; i <= 32; i++) {
+            if((Math.pow(2, i)-2) >= max) {
+                i   = 33;
+            }
+            else {
+                slash = slash - 1;
+            }
+        }
+
+        return slash;
 //          EditText x;
 //          for(i = 0; i < network.size(); i++) {
 //              for(j = 0; j < network.size()-i-1; j++) {
