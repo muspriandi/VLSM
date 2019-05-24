@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Array;
 import java.util.ArrayList;
 
 import static java.lang.Boolean.TRUE;
@@ -181,30 +180,32 @@ public class MainActivity extends AppCompatActivity {
                                 int prefix  = Integer.parseInt(prefixLength.getText().toString());
                                 ArrayList<Integer> binerNetwork = new ArrayList<Integer>(biner);
                                 ArrayList<ArrayList<Integer>> hasilNetwork = new ArrayList<ArrayList<Integer>>();
+                                ArrayList<EditText> vlsm = new ArrayList<EditText>(network);
 
-                                while(network.isEmpty() != TRUE) {
-                                    int max   = max(network);
-                                    for(i=0; i < network.size(); i++) {
-                                        if(Integer.parseInt(network.get(i).getText().toString()) == max) {
-                                            network.remove(i);
+                                while(vlsm.isEmpty() != TRUE) {
+                                    int x=0;
+                                    int slash           = slash(vlsm);
+                                    int pangkat         = slash-prefix;
+                                    double kombinasi    = Math.pow(2, pangkat);
+
+                                    int nilaiMax   = max(vlsm);
+                                    for(i=0; i < vlsm.size(); i++) {
+                                        if(Integer.parseInt(vlsm.get(i).getText().toString()) == nilaiMax) {
+                                            vlsm.remove(i);
                                         }
                                     }
 
-                                    int x=0;
-                                    int slash       = slash(network);
-                                    int pangkat     = slash-prefix;
-                                    double kombinasi   = Math.pow(2, pangkat);
+                                    while(prefix < slash) {
+                                        prefix      = prefix+1;
 
-                                    while(prefix != slash) {
-                                        prefix      = prefix+prefix;
-                                        kombinasi   = kombinasi/2;
+                                        double y   = kombinasi/2;
 
                                         for(j=0; j < kombinasi; j++) {
                                             binerNetwork.set(prefix, x);
 
-                                            hasilNetwork.add(j, binerNetwork);
+                                            hasilNetwork.add(binerNetwork);
 
-                                            if(j >= (kombinasi/2)) {
+                                            if(j < (y/2)) {
                                                 x   = 1;
                                             }
                                             else {
@@ -214,10 +215,12 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 }
 
-
+                                for(i = 0; i < hasilNetwork.size(); i++) {
+                                    Toast.makeText(MainActivity.this, hasilNetwork.get(i).toString(), Toast.LENGTH_LONG).show();
+                                }
 //                                StringBuilder builder = new StringBuilder();
-//                                for(i = 0; i < network.size(); i++) {
-//                                    builder.append(network.get(i).getText().toString());
+//                                for(i = 0; i < hasilNetwork.size(); i++) {
+//                                    builder.append(hasilNetwork.get(i).toString());
 //                                }
 //                                Toast.makeText(MainActivity.this, " "+builder+" ", Toast.LENGTH_LONG).show();
                             }
@@ -228,26 +231,26 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public int max(ArrayList<EditText> network) {
+    public int max(ArrayList<EditText> vlsm) {
         int i;
 
-        int max = Integer.parseInt(network.get(0).getText().toString());
-        for(i = 1; i < network.size(); i++) {
-            if(Integer.parseInt(network.get(i).getText().toString()) > max) {
-                max = Integer.parseInt(network.get(i).getText().toString());
+        int max = 0;
+        for(i = 0; i < vlsm.size(); i++) {
+            if(Integer.parseInt(vlsm.get(i).getText().toString()) > max) {
+                max = Integer.parseInt(vlsm.get(i).getText().toString());
             }
         }
 
         return max;
     }
 
-    public int slash(ArrayList<EditText> network) {
+    public int slash(ArrayList<EditText> vlsm) {
         int i;
         int slash = 31;
-        int max = max(network);
+        int nilaiMax = max(vlsm);
 
         for(i = 1; i <= 32; i++) {
-            if((Math.pow(2, i)-2) >= max) {
+            if((Math.pow(2, i)-2) >= nilaiMax) {
                 i   = 33;
             }
             else {
@@ -256,15 +259,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return slash;
-//          EditText x;
-//          for(i = 0; i < network.size(); i++) {
-//              for(j = 0; j < network.size()-i-1; j++) {
-//                  if(Integer.parseInt(network.get(j).getText().toString()) < Integer.parseInt(network.get(j+1).getText().toString())) {
-//                      x = (EditText) network.get(j);
-//                      network.set(j, network.get(j+1));
-//                      network.set(j+1, x);
-//                  }
-//              }
-//          }
     }
 }
