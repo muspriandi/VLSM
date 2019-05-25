@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import static java.lang.Boolean.TRUE;
+import static java.lang.Boolean.FALSE;
 
 public class MainActivity extends AppCompatActivity {
     TextView textView;
@@ -35,74 +35,171 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tambahkanNetwork() {
-        EditText oktetSatu      = (EditText) findViewById(R.id.oktetSatu);
-        EditText oktetDua       = (EditText) findViewById(R.id.oktetDua);
-        EditText oktetTiga      = (EditText) findViewById(R.id.oktetTiga);
-        EditText oktetEmpat     = (EditText) findViewById(R.id.oktetEmpat);
-        EditText prefixLength   = (EditText) findViewById(R.id.prefixLength);
         EditText jumlah         = (EditText) findViewById(R.id.jumlahNetwork);
 
-        if(oktetSatu.getText().toString().equals("")) {
-            Toast.makeText(getApplicationContext(), "Harap isi oktet pertama", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            if (oktetDua.getText().toString().equals("")) {
-                Toast.makeText(MainActivity.this, "Harap isi oktet kedua", Toast.LENGTH_SHORT).show();
+        if(validasi() == 1) {
+            if (jumlah.getText().toString().equals("")) {
+                jumlah.setError("Harap isi bidang ini");
             } else {
-                if (oktetTiga.getText().toString().equals("")) {
-                    Toast.makeText(MainActivity.this, "Harap isi oktet ketiga", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (oktetEmpat.getText().toString().equals("")) {
-                        Toast.makeText(MainActivity.this, "Harap isi oktet keempat", Toast.LENGTH_SHORT).show();
-                    } else {
-                        if (prefixLength.getText().toString().equals("")) {
-                            Toast.makeText(MainActivity.this, "Harap isi nilai prefix length", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (jumlah.getText().toString().equals("")) {
-                                jumlah.setError("Harap isi bidang ini");
-                            } else {
-                                Integer jumlahNetwork = Integer.parseInt(jumlah.getText().toString());
-                                LinearLayout layout = (LinearLayout) findViewById(R.id.loopLayout);
-                                final ArrayList<EditText> network = new ArrayList<EditText>();
+                Integer jumlahNetwork = Integer.parseInt(jumlah.getText().toString());
+                LinearLayout layout = (LinearLayout) findViewById(R.id.loopLayout);
+                final ArrayList<EditText> network = new ArrayList<EditText>();
 
-                                layout.removeAllViews();
-                                int i = 1;
-                                for (int j = 0; j < jumlahNetwork; j++) {
-                                    textView = new TextView(this);
-                                    textView.setText("Network " + i);
-                                    textView.setWidth(50);
-                                    layout.addView(textView);
+                layout.removeAllViews();
+                int i = 1;
+                for (int j = 0; j < jumlahNetwork; j++) {
+                    textView = new TextView(this);
+                    textView.setText("Network " + i);
+                    textView.setWidth(50);
+                    layout.addView(textView);
 
-                                    editText = new EditText(this);
-                                    network.add(editText);
-                                    editText.setError("Harap isi bidang ini");
-                                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
-                                    editText.setHint("Masukkan banyak IP untuk network " + i);
-                                    layout.addView(editText);
+                    editText = new EditText(this);
+                    network.add(editText);
+                    editText.setError("Harap isi bidang ini");
+                    editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+                    editText.setHint("Masukkan banyak IP untuk network " + i);
+                    layout.addView(editText);
 
-                                    i++;
-                                }
-
-                                button = new Button(this);
-                                button.setText("Hitung");
-                                layout.addView(button);
-
-                                button.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        hitung(network);
-                                    }
-                                });
-                            }
-                        }
-                    }
+                    i++;
                 }
+
+                button = new Button(this);
+                button.setText("Hitung");
+                layout.addView(button);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        hitung(network);
+                    }
+                });
             }
         }
     }
 
     public void hitung(ArrayList<EditText> network) {
+        EditText oktetSatu      = (EditText) findViewById(R.id.oktetSatu);
+        EditText oktetDua       = (EditText) findViewById(R.id.oktetDua);
+        EditText oktetTiga      = (EditText) findViewById(R.id.oktetTiga);
+        EditText oktetEmpat     = (EditText) findViewById(R.id.oktetEmpat);
+        EditText prefixLength   = (EditText) findViewById(R.id.prefixLength);
+
+        if (validasi() == 1) {
+            int i;
+            int j = 1;
+            int k = 0;
+
+            for (i = 0; i < network.size(); i++) {
+                if (network.get(i).getText().toString().equals("")) {
+                    Toast.makeText(MainActivity.this, "Harap isi kebutuhan IP untuk network "+j, Toast.LENGTH_SHORT).show();
+
+                    k = 1;
+                    i = network.size();
+                } else {
+                    j++;
+                }
+            }
+
+            if(k != 1) {
+                int m;
+                int n;
+                ArrayList<Integer> biner = new ArrayList<Integer>();
+
+                for(i = 0; i < 4 ; i++) {
+                    if(i==0) {
+                        m = 128;
+                        n = Integer.parseInt(oktetSatu.getText().toString());
+                    }
+                    else {
+                        if(i==1) {
+                            m = 128;
+                            n = Integer.parseInt(oktetDua.getText().toString());
+                        }
+                        else {
+                            if(i==2) {
+                                m = 128;
+                                n = Integer.parseInt(oktetTiga.getText().toString());
+                            }
+                            else {
+                                m = 128;
+                                n = Integer.parseInt(oktetEmpat.getText().toString());
+                            }
+                        }
+                    }
+                    for (j = 0; j < 8; j++) {
+                        if (n >= m) {
+                            biner.add(1);
+
+                            n = n - m;
+                        } else {
+                            biner.add(0);
+                        }
+                        m = m / 2;
+                    }
+                }
+
+                int prefix  = Integer.parseInt(prefixLength.getText().toString());
+                ArrayList<ArrayList<Integer>> hasilNetwork = new ArrayList<ArrayList<Integer>>();
+                ArrayList<EditText> vlsm = new ArrayList<EditText>(network);
+
+                while(vlsm.size() != 0) {
+                    int x=0;
+                    int slash           = slash(vlsm);
+                    int pangkat         = slash-prefix;
+                    double kombinasi    = Math.pow(2, pangkat);
+
+                    vlsm                = hapusNetwork(slash, vlsm);
+
+                    if(hasilNetwork.size() != 0) {
+                        j   = hasilNetwork.size()-1;
+                        for(i=0; i< biner.size();i++) {
+                            biner.set(i, hasilNetwork.get(j).get(i));
+                        }
+                    }
+
+                    while(prefix < slash) {
+                        prefix      = prefix+1;
+                        double y    = kombinasi/2;
+                        int z;
+
+                        for(j=0; j < kombinasi; j++) {
+                            z       = prefix;
+
+                            ArrayList<Integer> binerNetwork = new ArrayList<Integer>(biner);
+
+                            binerNetwork.set((prefix-1), x);
+                            while(z < 32) {
+                                binerNetwork.set(z, 0);
+                                z++;
+                            }
+
+                            hasilNetwork.add(binerNetwork);
+
+                            if(j < (y/2)) {
+                                x   = 1;
+                            }
+                            else {
+                                x   = 0;
+                            }
+                        }
+                    }
+                }
+
+                for(i = 0; i < hasilNetwork.size(); i++) {
+                    Toast.makeText(MainActivity.this, hasilNetwork.get(i).toString(), Toast.LENGTH_LONG).show();
+                }
+//                               StringBuilder builder = new StringBuilder();
+//                               for(i = 0; i < hasilNetwork.size(); i++) {
+//                                   builder.append(hasilNetwork.get(i).toString());
+//                               }
+//                               Toast.makeText(MainActivity.this, " "+builder+" ", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    public int validasi() {
+        int m = 0;
         EditText oktetSatu      = (EditText) findViewById(R.id.oktetSatu);
         EditText oktetDua       = (EditText) findViewById(R.id.oktetDua);
         EditText oktetTiga      = (EditText) findViewById(R.id.oktetTiga);
@@ -124,111 +221,14 @@ public class MainActivity extends AppCompatActivity {
                         if (prefixLength.getText().toString().equals("")) {
                             Toast.makeText(MainActivity.this, "Harap isi nilai prefix length", Toast.LENGTH_SHORT).show();
                         } else {
-                            int i;
-                            int j = 1;
-                            int k = 0;
-
-                            for (i = 0; i < network.size(); i++) {
-                                if (network.get(i).getText().toString().equals("")) {
-                                    Toast.makeText(MainActivity.this, "Harap isi kebutuhan IP untuk network "+j, Toast.LENGTH_SHORT).show();
-
-                                    k = 1;
-                                    i = network.size();
-                                } else {
-                                    j++;
-                                }
-                            }
-
-                            if(k != 1) {
-                                int m;
-                                int n;
-                                ArrayList<Integer> biner = new ArrayList<Integer>();
-
-                                for(i = 0; i < 4 ; i++) {
-                                    if(i==0) {
-                                        m = 128;
-                                        n = Integer.parseInt(oktetSatu.getText().toString());
-                                    }
-                                    else {
-                                        if(i==1) {
-                                            m = 128;
-                                            n = Integer.parseInt(oktetDua.getText().toString());
-                                        }
-                                        else {
-                                            if(i==2) {
-                                                m = 128;
-                                                n = Integer.parseInt(oktetTiga.getText().toString());
-                                            }
-                                            else {
-                                                m = 128;
-                                                n = Integer.parseInt(oktetEmpat.getText().toString());
-                                            }
-                                        }
-                                    }
-                                    for (j = 0; j < 8; j++) {
-                                        if (n >= m) {
-                                            biner.add(1);
-
-                                            n = n - m;
-                                        } else {
-                                            biner.add(0);
-                                        }
-                                        m = m / 2;
-                                    }
-                                }
-
-                                int prefix  = Integer.parseInt(prefixLength.getText().toString());
-                                ArrayList<Integer> binerNetwork = new ArrayList<Integer>(biner);
-                                ArrayList<ArrayList<Integer>> hasilNetwork = new ArrayList<ArrayList<Integer>>();
-                                ArrayList<EditText> vlsm = new ArrayList<EditText>(network);
-
-                                while(vlsm.isEmpty() != TRUE) {
-                                    int x=0;
-                                    int slash           = slash(vlsm);
-                                    int pangkat         = slash-prefix;
-                                    double kombinasi    = Math.pow(2, pangkat);
-
-                                    int nilaiMax   = max(vlsm);
-                                    for(i=0; i < vlsm.size(); i++) {
-                                        if(Integer.parseInt(vlsm.get(i).getText().toString()) == nilaiMax) {
-                                            vlsm.remove(i);
-                                        }
-                                    }
-
-                                    while(prefix < slash) {
-                                        prefix      = prefix+1;
-
-                                        double y   = kombinasi/2;
-
-                                        for(j=0; j < kombinasi; j++) {
-                                            binerNetwork.set(prefix, x);
-
-                                            hasilNetwork.add(binerNetwork);
-
-                                            if(j < (y/2)) {
-                                                x   = 1;
-                                            }
-                                            else {
-                                                x   = 0;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                for(i = 0; i < hasilNetwork.size(); i++) {
-                                    Toast.makeText(MainActivity.this, hasilNetwork.get(i).toString(), Toast.LENGTH_LONG).show();
-                                }
-//                                StringBuilder builder = new StringBuilder();
-//                                for(i = 0; i < hasilNetwork.size(); i++) {
-//                                    builder.append(hasilNetwork.get(i).toString());
-//                                }
-//                                Toast.makeText(MainActivity.this, " "+builder+" ", Toast.LENGTH_LONG).show();
-                            }
+                            m = 1;
                         }
                     }
                 }
             }
         }
+
+        return m;
     }
 
     public int max(ArrayList<EditText> vlsm) {
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         int slash = 31;
         int nilaiMax = max(vlsm);
 
-        for(i = 1; i <= 32; i++) {
+        for(i = 1; i <= 31; i++) {
             if((Math.pow(2, i)-2) >= nilaiMax) {
                 i   = 33;
             }
@@ -259,5 +259,40 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return slash;
+    }
+
+    public ArrayList<EditText> hapusNetwork(Integer slash, ArrayList<EditText> vlsm) {
+        int i               = 2;
+        double host         = 0;
+        double hostBawah    = 0;
+        int slashBanding    = 31;
+
+        while(slash != slashBanding) {
+            host            = Math.pow(2, i)-2;
+            hostBawah       = Math.pow(2, (i-1))-2;
+            slashBanding    = slashBanding-1;
+            i               = i+1;
+        }
+
+        int satuNetwork = 0;
+        for(i = 0; i < vlsm.size(); i++) {
+            if(Integer.parseInt(vlsm.get(i).getText().toString()) <= host && Integer.parseInt(vlsm.get(i).getText().toString()) > hostBawah) {
+                satuNetwork = satuNetwork+1;
+            }
+        }
+
+        i = 0;
+        int j = 0;
+        while(i != satuNetwork) {
+            if(Integer.parseInt(vlsm.get(j).getText().toString()) <= host && Integer.parseInt(vlsm.get(j).getText().toString()) > hostBawah) {
+                vlsm.remove(j);
+                i++;
+            }
+            else {
+                j++;
+            }
+        }
+
+        return vlsm;
     }
 }
