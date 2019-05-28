@@ -1,5 +1,6 @@
 package com.example.vlsm;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -141,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 int prefix = Integer.parseInt(prefixLength.getText().toString());
                 ArrayList<EditText> vlsm = new ArrayList<EditText>(network);
                 ArrayList<ArrayList<Integer>> hasilNetwork = new ArrayList<ArrayList<Integer>>();
+                ArrayList<Integer> hasilSlash   = new ArrayList<Integer>();
                 boolean selesai = FALSE;
 
                 while (vlsm.size() != 0 && selesai == FALSE) {
@@ -149,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
                     double kombinasi = Math.pow(2, pangkat);
 
                     int seNetwork = satuNetwork(slash, vlsm);
+
+                    for(i = 0; i < seNetwork; i++) {
+                        hasilSlash.add(slash);
+                    }
 
                     vlsm = hapusNetwork(slash, vlsm);
 
@@ -179,7 +186,13 @@ public class MainActivity extends AppCompatActivity {
 
                     int x = 0;
                     int y = 0;
-                    int z = seNetwork;
+                    int z;
+                    if(kombinasi > seNetwork) {
+                        z = seNetwork;
+                    }
+                    else {
+                        z = (int) kombinasi;
+                    }
                     ArrayList<Integer> binerNetwork = new ArrayList<Integer>(biner);
 
                     while(z != 0) {
@@ -204,12 +217,13 @@ public class MainActivity extends AppCompatActivity {
                             binerNetwork.set(m, 0);
                             m++;
                         }
+
                         hasilNetwork.add(binerNetwork);
 
                         z--;
 
                         binerNetwork = new ArrayList<Integer>(biner);
-                        if(z == 0 && kombinasi - seNetwork > 0) {
+                        if(z == 0 && kombinasi > seNetwork) {
                             m = prefix;
 
                             for(i=0; i< pangkat; i++) {
@@ -221,67 +235,64 @@ public class MainActivity extends AppCompatActivity {
                                 biner.set(i, binerNetwork.get(i));
                             }
                         }
-
                     }
                     prefix = slash;
 
-                    if(kombinasi - seNetwork <= 0) {
+                    if(kombinasi <= seNetwork) {
                         selesai = TRUE;
                     }
                 }
 
-//                    while (prefix < slash) {
-//                        prefix = prefix + 1;
-//                        int count = 0;
-//                        int z;
-//                        m = 1;
-//
-//                        for (j = 0; j < kombinasi; j++) {
-//
-//                            double y = (kombinasi / 2) - count;
-//                            if (y < m) {
-//                                x = 1;
-//                            } else {
-//                                x = 0;
-//                            }
-//                            z = prefix;
-//
-//                            ArrayList<Integer> binerNetwork = new ArrayList<Integer>(biner);
-//
-//                            binerNetwork.set((prefix - 1), x);
-//                            while (z < 32) {
-//                                binerNetwork.set(z, 0);
-//                                z++;
-//                            }
-//
-//                            if (seNetwork > j) {
-//                                  hasilNetwork.add(binerNetwork);
-//                            } else {
-//                                j = (int) kombinasi;
-//                            }
-//
-//                            for (i = 0; i < biner.size(); i++) {
-//                                biner.set(i, binerNetwork.get(i));
-//                            }
-//
-//
-//                            if (y + y == m) {
-//                                m = 1;
-//                            } else {
-//                                m++;
-//                            }
-//                            count++;
-//                        }
-//                    }
 
-                for (i = 0; i < hasilNetwork.size(); i++) {
-                    Toast.makeText(MainActivity.this, hasilNetwork.get(i).toString(), Toast.LENGTH_LONG).show();
+                String networkLama = oktetSatu.getText().toString()+"."+oktetDua.getText().toString()+"."+oktetTiga.getText().toString()+"."+oktetEmpat.getText().toString()+" /"+prefixLength.getText().toString();
+                ArrayList<String> networkBaru    = new ArrayList<String>();
+                StringBuilder builder = new StringBuilder();
+                int desimal;
+
+                for(i=0; i < hasilNetwork.size(); i++) {
+                    int z = 0;
+                    int y = 0;
+
+                    for(j=0; j < (hasilNetwork.get(i).size())/8; j++) {
+                        desimal = 0;
+                        int x = 128;
+
+                        for(k=0; k <(hasilNetwork.get(i).size())/4 ; k++) {
+                            if(hasilNetwork.get(i).get(z) == 1) {
+                                desimal  = desimal+x;
+                            }
+                            x = x/2;
+                            z++;
+                        }
+                        builder.append(desimal);
+                        if(y <= 2) {
+                            builder.append(".");
+                        }
+                        y++;
+                    }
+                    networkBaru.add(builder.toString());
+                    builder.delete(0,31);
                 }
-//                               StringBuilder builder = new StringBuilder();
-//                               for(i = 0; i < hasilNetwork.size(); i++) {
-//                                   builder.append(hasilNetwork.get(i).toString());
-//                               }
-//                               Toast.makeText(MainActivity.this, " "+builder+" ", Toast.LENGTH_LONG).show();
+                int IPawal[] = new int[network.size()];
+                for(i = 0; i < network.size(); i++) {
+                    IPawal[i]  = Integer.parseInt(network.get(i).getText().toString());
+                }
+
+                for(i = 0; i <= network.size()-2; i++) {
+                    for(j = 0; j <=network.size()-2-i ; j++) {
+                        if(IPawal[j] < IPawal[j+1]) {
+                            int x       = IPawal[j];
+                            IPawal[j]   = IPawal[j+1];
+                            IPawal[j+1] = x;
+                        }
+                    }
+                }
+                ArrayList<Integer> kebutuhanIP = new ArrayList<Integer>();
+                for(i = 0; i < hasilSlash.size(); i++) {
+                    kebutuhanIP.add(IPawal[i]);
+                }
+
+                openActivityDua(networkLama, networkBaru, hasilSlash, kebutuhanIP);
             }
         }
     }
@@ -403,5 +414,14 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return satuNetwork;
+    }
+
+    public void openActivityDua(String networkLama, ArrayList<String> networkBaru, ArrayList<Integer> hasilSlash, ArrayList<Integer> kebutuhanIP) {
+        Intent intent   = new Intent(this, OutputActivity.class);
+        intent.putExtra("networkLama", networkLama);
+        intent.putExtra("networkBaru", networkBaru);
+        intent.putExtra("hasilSlash", hasilSlash);
+        intent.putExtra("kebutuhanIP", kebutuhanIP);
+        startActivity(intent);
     }
 }
