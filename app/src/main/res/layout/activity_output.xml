@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OutputActivity"
     android:layout_margin="10dp">
 
-    <TextView
+    <TextVi ew
         android:id="@+id/networkLama"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="---.---.---.--- /--"
         android:textSize="20dp"
         android:textAlignment="center"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"/>
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"/>
 
     <ListView
         android:id="@+id/networkBaru"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/networkLama">
 
     </ListView>

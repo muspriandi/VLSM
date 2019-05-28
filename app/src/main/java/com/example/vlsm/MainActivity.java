@@ -143,18 +143,21 @@ public class MainActivity extends AppCompatActivity {
                 int prefix = Integer.parseInt(prefixLength.getText().toString());
                 ArrayList<EditText> vlsm = new ArrayList<EditText>(network);
                 ArrayList<ArrayList<Integer>> hasilNetwork = new ArrayList<ArrayList<Integer>>();
-                ArrayList<Integer> hasilSlash   = new ArrayList<Integer>();
+                int slashAwal[] = new int[network.size()];
+                int p = 0;
                 boolean selesai = FALSE;
 
                 while (vlsm.size() != 0 && selesai == FALSE) {
                     int slash = slash(vlsm);
+
                     int pangkat = slash - prefix;
                     double kombinasi = Math.pow(2, pangkat);
 
                     int seNetwork = satuNetwork(slash, vlsm);
 
-                    for(i = 0; i < seNetwork; i++) {
-                        hasilSlash.add(slash);
+                    for(i = 0; i < seNetwork ; i++) {
+                        slashAwal[p] = slash;
+                        p++;
                     }
 
                     vlsm = hapusNetwork(slash, vlsm);
@@ -169,7 +172,8 @@ public class MainActivity extends AppCompatActivity {
                         for (j = 0; j < kombinasi; j++) {
                             if (a < b) {
                                 c = 1;
-                            } else {
+                            }
+                            else {
                                 c = 0;
                             }
 
@@ -177,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
 
                             if (a + a == b) {
                                 b = 1;
-                            } else {
+                            }
+                            else {
                                 b++;
                             }
                         }
@@ -287,9 +292,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+
                 ArrayList<Integer> kebutuhanIP = new ArrayList<Integer>();
-                for(i = 0; i < hasilSlash.size(); i++) {
+                ArrayList<Integer> hasilSlash   = new ArrayList<Integer>();
+                for(i = 0; i < networkBaru.size(); i++) {
                     kebutuhanIP.add(IPawal[i]);
+                    hasilSlash.add(slashAwal[i]);
                 }
 
                 openActivityDua(networkLama, networkBaru, hasilSlash, kebutuhanIP);
