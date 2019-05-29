@@ -48,7 +48,7 @@ public class NetworkListAdapter extends BaseAdapter {
 
         network.setText("Network :  "+mNetwork.get(position).getNetwork());
         prefix.setText("Prefix length :  /"+String.valueOf(mNetwork.get(position).getPrefix()));
-        host.setText("Host (Range IP) :  "+mNetwork.get(position).getHost());
+        host.setText("Hosts (Range IP) :  "+mNetwork.get(position).getHost());
         broadcast.setText("Broadcast :  "+mNetwork.get(position).getBroadcast());
         ipTersedia.setText("Jumlah IP tersedia :  "+String.valueOf(mNetwork.get(position).getIpTersedia())+ " IP");
         ipButuh.setText("Jumlah IP terpakai :  "+String.valueOf(mNetwork.get(position).getIpButuh())+ " IP");

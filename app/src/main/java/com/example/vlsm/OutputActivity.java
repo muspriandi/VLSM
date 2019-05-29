@@ -25,10 +25,13 @@ public class OutputActivity extends AppCompatActivity {
         listNetowrk         = (ListView) findViewById(R.id.networkBaru);
 
         Intent intent = getIntent();
-        String networkLama      = intent.getStringExtra("networkLama");
-        ArrayList<String> networkBaru   = intent.getStringArrayListExtra("networkBaru");
-        ArrayList<Integer> prefix        = intent.getIntegerArrayListExtra("hasilSlash");
-        ArrayList<Integer> ipButuh      = intent.getIntegerArrayListExtra("kebutuhanIP");
+        String networkLama                  = intent.getStringExtra("networkLama");
+        ArrayList<String> networkBaru       = intent.getStringArrayListExtra("networkBaru");
+        ArrayList<String> firstHost         = intent.getStringArrayListExtra("firstHost");
+        ArrayList<String> lastHost          = intent.getStringArrayListExtra("lastHost");
+        ArrayList<String> broadcastAddress  = intent.getStringArrayListExtra("broadcastAddress");
+        ArrayList<Integer> prefix           = intent.getIntegerArrayListExtra("hasilSlash");
+        ArrayList<Integer> ipButuh          = intent.getIntegerArrayListExtra("kebutuhanIP");
 
         textView.setText("" + networkLama);
 
@@ -36,10 +39,7 @@ public class OutputActivity extends AppCompatActivity {
         int i;
 
         for (i=0; i<networkBaru.size(); i++) {
-            mNetwork.add(new Network(i, networkBaru.get(i), prefix.get(i),
-                    "BELUM",
-                    "BELUM",
-                    ipTersedia(prefix.get(i)), ipButuh.get(i), ipTersedia(prefix.get(i)) - ipButuh.get(i)));
+            mNetwork.add(new Network(i, networkBaru.get(i), prefix.get(i), firstHost.get(i)+" - "+lastHost.get(i), broadcastAddress.get(i), ipTersedia(prefix.get(i)), ipButuh.get(i), ipTersedia(prefix.get(i)) - ipButuh.get(i)));
         }
         adapter = new NetworkListAdapter(getApplicationContext(), mNetwork);
         listNetowrk.setAdapter(adapter);

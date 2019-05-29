@@ -278,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
                     networkBaru.add(builder.toString());
                     builder.delete(0,31);
                 }
+
                 int IPawal[] = new int[network.size()];
                 for(i = 0; i < network.size(); i++) {
                     IPawal[i]  = Integer.parseInt(network.get(i).getText().toString());
@@ -300,7 +301,83 @@ public class MainActivity extends AppCompatActivity {
                     hasilSlash.add(slashAwal[i]);
                 }
 
-                openActivityDua(networkLama, networkBaru, hasilSlash, kebutuhanIP);
+                int broadcast[][]   = new int[networkBaru.size()][32];
+                int hostAwal[][]    = new int[networkBaru.size()][32];
+                int hostAkhir[][]   = new int[networkBaru.size()][32];
+                ArrayList<String> broadcastAddress = new ArrayList<String>();
+                ArrayList<String> firstHost = new ArrayList<String>();
+                ArrayList<String> lastHost = new ArrayList<String>();
+
+                for(i=0; i<networkBaru.size(); i++) {
+                    for(j=0; j<32; j++) {
+                        broadcast[i][j] = hasilNetwork.get(i).get(j);
+                        hostAwal[i][j] = hasilNetwork.get(i).get(j);
+                        hostAkhir[i][j] = hasilNetwork.get(i).get(j);
+                    }
+                }
+
+                for(i=0; i<networkBaru.size(); i++) {
+                    int x = hasilSlash.get(i);
+                    while (x < 32) {
+                        hostAwal[i][x]  = 0;
+                        hostAkhir[i][x] = 1;
+                        broadcast[i][x] = 1;
+
+                        if(x == 31) {
+                            hostAwal[i][x]  = 1;
+                            hostAkhir[i][x] = 0;
+                        }
+                        x++;
+                    }
+                }
+
+                int desimal2;
+                int desimal3;
+                StringBuilder builder2 = new StringBuilder();
+                StringBuilder builder3 = new StringBuilder();
+                for(i=0; i < hasilNetwork.size(); i++) {
+                    int z = 0;
+                    int y = 0;
+
+                    for(j=0; j < 4; j++) {
+                        desimal     = 0;
+                        desimal2    = 0;
+                        desimal3    = 0;
+                        int x = 128;
+
+                        for(k=0; k < 8 ; k++) {
+                            if(broadcast[i][z] == 1) {
+                                desimal  = desimal+x;
+                            }
+                            if(hostAwal[i][z] == 1) {
+                                desimal2  = desimal2+x;
+                            }
+                            if(hostAkhir[i][z] == 1) {
+                                desimal3  = desimal3+x;
+                            }
+                            x = x/2;
+                            z++;
+                        }
+                        builder.append(desimal);
+                        builder2.append(desimal2);
+                        builder3.append(desimal3);
+                        if(y <= 2) {
+                            builder.append(".");
+                            builder2.append(".");
+                            builder3.append(".");
+                        }
+                        y++;
+                    }
+                    broadcastAddress.add(builder.toString());
+                    builder.delete(0,31);
+                    firstHost.add(builder2.toString());
+                    builder2.delete(0,31);
+                    lastHost.add(builder3.toString());
+                    builder3.delete(0,31);
+                }
+
+
+                openActivityDua(networkLama, networkBaru, hasilSlash, kebutuhanIP, broadcastAddress, firstHost, lastHost);
             }
         }
     }
@@ -424,12 +501,15 @@ public class MainActivity extends AppCompatActivity {
         return satuNetwork;
     }
 
-    public void openActivityDua(String networkLama, ArrayList<String> networkBaru, ArrayList<Integer> hasilSlash, ArrayList<Integer> kebutuhanIP) {
+    public void openActivityDua(String networkLama, ArrayList<String> networkBaru, ArrayList<Integer> hasilSlash, ArrayList<Integer> kebutuhanIP, ArrayList<String> broadcastAddress, ArrayList<String> firstHost, ArrayList<String> lastHost) {
         Intent intent   = new Intent(this, OutputActivity.class);
         intent.putExtra("networkLama", networkLama);
         intent.putExtra("networkBaru", networkBaru);
         intent.putExtra("hasilSlash", hasilSlash);
         intent.putExtra("kebutuhanIP", kebutuhanIP);
+        intent.putExtra("broadcastAddress", broadcastAddress);
+        intent.putExtra("firstHost", firstHost);
+        intent.putExtra("lastHost", lastHost);
         startActivity(intent);
     }
 }

@@ -6,21 +6,31 @@
     tools:context=".OutputActivity"
     android:layout_margin="10dp">
 
-    <TextVi ew
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Network Lama :"/>
+    <TextView
         android:id="@+id/networkLama"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="---.---.---.--- /--"
         android:textSize="20dp"
         android:textAlignment="center"
-        android:paddingTop="5dp"
-        android:paddingBottom="10dp"/>
-
+        android:layout_marginBottom="5dp"
+        android:layout_below="@+id/text1"/>
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hasil alokasi IP dengan VLSM :"
+        android:layout_below="@+id/networkLama"/>
     <ListView
         android:id="@+id/networkBaru"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/networkLama">
+        android:layout_below="@+id/text2">
 
     </ListView>
 
